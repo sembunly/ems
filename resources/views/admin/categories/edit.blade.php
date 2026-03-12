@@ -65,7 +65,7 @@ rows="3">{{ old('description', $category->description) }}</textarea>
 
 <div>
 @if($category->image)
-<img src="{{ asset('images/categories/'.$category->image) }}"
+<img src="{{ asset($category->image) }}"
 class="border rounded"
 width="140">
 @else

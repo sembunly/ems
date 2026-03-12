@@ -140,7 +140,7 @@
           <div class="card soft-card h-100">
 
             @if($p->image)
-              <img src="{{ asset('images/products/' . $p->image) }}" class="thumb" alt="{{ $p->name }}">
+              <img src="{{ asset($p->image) }}" class="thumb" alt="{{ $p->name }}">
             @else
               <div class="noimg"><span class="small">No Image</span></div>
             @endif

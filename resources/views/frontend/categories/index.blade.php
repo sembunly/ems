@@ -30,7 +30,7 @@
           <div class="card soft-card h-100">
 
             @if($c->image)
-              <img src="{{ asset('images/categories/' . $c->image) }}" class="thumb" alt="{{ $c->name }}">
+              <img src="{{ asset($c->image) }}" class="thumb" alt="{{ $c->name }}">
             @else
               <div class="noimg">No Image</div>
             @endif

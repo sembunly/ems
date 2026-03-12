@@ -41,7 +41,7 @@
 <td class="text-center">
 
 @if($c->image)
-<img src="{{ asset('images/categories/'.$c->image) }}"
+<img src="{{ asset($c->image) }}"
 width="70"
 class="border rounded">
 @else

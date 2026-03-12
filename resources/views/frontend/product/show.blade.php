@@ -41,7 +41,7 @@
     <div class="p-3 card soft-card">
       <div class="overflow-hidden rounded-4" style="box-shadow: var(--soft-shadow);">
         @php
-          $mainImg = $product->image ? asset('images/products/' . $product->image) : null;
+          $mainImg = $product->image ? asset($product->image) : null;
         @endphp
       </div>
 
@@ -49,7 +49,7 @@
         $thumbs = collect([]);
 
         if ($product->image) {
-            $thumbs->push(asset('images/products/' . $product->image));
+            $thumbs->push(asset($product->image));
         }
   
         if (isset($images) && $images) {

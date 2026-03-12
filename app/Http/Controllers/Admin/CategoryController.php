@@ -41,7 +41,7 @@ class CategoryController extends Controller
             $file = $request->file('image');
             $filename = time().'_'.$file->getClientOriginalName();
             $file->move(public_path('images/categories'),$filename);
-            $data['image'] = $filename;
+            $data['image'] = 'images/categories/' . $filename;
         }
 
         Category::create($data);
@@ -82,14 +82,14 @@ class CategoryController extends Controller
         ]);
 
         if($request->hasFile('image')){
-            if($category->image && file_exists(public_path('images/categories/'.$category->image))){
-                unlink(public_path('images/categories/'.$category->image));
+            if($category->image && file_exists(public_path($category->image))){
+                unlink(public_path($category->image));
             }
 
             $file = $request->file('image');
             $filename = time().'_'.$file->getClientOriginalName();
             $file->move(public_path('images/categories'),$filename);
-            $data['image'] = $filename;
+            $data['image'] = 'images/categories/' . $filename;
         }
 
         $category->update($data);

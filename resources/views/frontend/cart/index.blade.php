@@ -70,7 +70,7 @@
             <tbody id="cart-body">
               @foreach($cartItems as $pid => $it)
                 @php
-                  $img = !empty($it['image']) ? asset('images/products/' . $it['image']) : null;
+                  $img = !empty($it['image']) ? asset($it['image']) : null;
                   $price = (float)($it['price'] ?? 0);
                   $qty = (int)($it['qty'] ?? 1);
                   $lineTotal = $price * $qty;

@@ -80,7 +80,7 @@
 <label>Image</label><br>
 
 @if($product->image)
-<img src="{{ asset('images/products/'.$product->image) }}" width="120" class="mb-2">
+<img src="{{ asset($product->image) }}" width="120" class="mb-2">
 @endif
 
 <input type="file" name="image" class="form-control">

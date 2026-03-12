@@ -54,8 +54,7 @@ class ProductController extends Controller
         $filename = time() . '_' . $file->getClientOriginalName();
         $file->move(public_path('images/products'), $filename);
 
-        // save only filename
-        $data['image'] = $filename;
+        $data['image'] = 'images/products/' . $filename;
     }
 
     Product::create($data);
@@ -107,7 +106,7 @@ public function update(Request $request, Product $product)
         $file = $request->file('image');
         $filename = time() . '_' . $file->getClientOriginalName();
         $file->move(public_path('images/products'), $filename);
-        $data['image'] = $filename;
+        $data['image'] = 'images/products/' . $filename;
     }
 
     $product->update($data);
