@@ -53,10 +53,10 @@
                             <td>{{ $order->created_at }}</td>
                             <!--<td>{{ $order->updated_at }}</td>-->
                             <td class="text-center">
-                                <!--<a href="{{ route('admin.orders.edit', $order->id) }}"
+                                <a href="{{ route('admin.orders.edit', $order->id) }}"
                                    class="btn btn-warning btn-sm">
                                     Edit
-                                </a>-->
+                                </a>
 
                                 <form action="{{ route('admin.orders.destroy', $order->id) }}"
                                       method="POST"
