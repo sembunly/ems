@@ -95,28 +95,8 @@
         {{-- QR extra fields --}}
         <div id="qrBox" class="mt-3" style="display:none;">
           <div class="border alert alert-light rounded-4">
-            <div class="mb-2 fw-bold">QR Payment</div>
-            <div class="text-muted small">Upload receipt image or enter payment reference (optional).</div>
-          </div>
-
-          <div class="row g-2">
-            <div class="col-md-6">
-              <label class="mb-1 form-label small text-muted">Payment Ref (Optional)</label>
-              <input name="payment_ref" value="{{ old('payment_ref') }}" class="form-control pill" placeholder="Transaction ID">
-              @error('payment_ref')<div class="mt-1 text-danger small">{{ $message }}</div>@enderror
-            </div>
-
-            <div class="col-md-6">
-              <label class="mb-1 form-label small text-muted">Upload Receipt (Optional)</label>
-              <input type="file" name="receipt_image" class="form-control pill" accept="image/*" id="receiptInput">
-              @error('receipt_image')<div class="mt-1 text-danger small">{{ $message }}</div>@enderror
-            </div>
-
-            <div class="col-12" id="receiptPreview" style="display:none;">
-              <div class="overflow-hidden rounded-4" style="box-shadow: var(--soft-shadow);">
-                <img id="receiptImg" src="" style="width:100%;max-height:280px;object-fit:cover;" alt="receipt">
-              </div>
-            </div>
+            <div class="mb-2 fw-bold"><i class="bi bi-qr-code me-1"></i> QR Payment</div>
+            <div class="text-muted small">After placing the order, you will be redirected to a page with a QR code. Scan it to complete your payment instantly.</div>
           </div>
         </div>
 
@@ -188,18 +168,5 @@
   }
   document.querySelectorAll('input[name="payment_method"]').forEach(r => r.addEventListener('change', toggleQR));
   toggleQR();
-
-  // Preview receipt image
-  const receiptInput = document.getElementById('receiptInput');
-  if(receiptInput){
-    receiptInput.addEventListener('change', (e)=>{
-      const file = e.target.files?.[0];
-      if(!file) return;
-
-      const url = URL.createObjectURL(file);
-      document.getElementById('receiptImg').src = url;
-      document.getElementById('receiptPreview').style.display = 'block';
-    });
-  }
 </script>
 @endpush
