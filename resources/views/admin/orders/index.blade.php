@@ -42,6 +42,8 @@
                             <td>
                                 @if($order->status == 'pending')
                                     <span class="badge bg-warning text-dark">Pending</span>
+                                @elseif($order->status == 'awaiting_payment')
+                                    <span class="badge bg-info text-dark">Awaiting Payment</span>
                                 @elseif($order->status == 'completed')
                                     <span class="badge bg-success">Completed</span>
                                 @elseif($order->status == 'cancelled')

@@ -27,6 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/checkout/qr/{order}', [CheckoutController::class, 'qrPayment'])->name('checkout.qr');
+    Route::get('/checkout/qr-confirm/{token}', [CheckoutController::class, 'qrConfirm'])->name('checkout.qr.confirm');
+    Route::get('/checkout/qr-status/{order}', [CheckoutController::class, 'qrStatus'])->name('checkout.qr.status');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
