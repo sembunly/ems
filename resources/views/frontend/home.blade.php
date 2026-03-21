@@ -50,25 +50,29 @@
 
 @section('content')
 
-  {{-- Filters --}}
-  <form method="GET" class="p-3 mb-3 card soft-card p-md-4">
-    <div class="row g-2 align-items-end">
+<div class="row g-4">
+  {{-- Left Sidebar: Filters --}}
+  <div class="col-lg-3">
+    <form method="GET" class="search-filter-card">
+      <h5 class="fw-bold mb-3" style="color: #4f46e5;">
+        <i class="bi bi-funnel me-2"></i>Filters
+      </h5>
 
-      <div class="col-md-4">
-        <label class="mb-1 form-label small text-muted">Search</label>
+      <div class="mb-3">
+        <label class="form-label small fw-medium">Search</label>
         <input
           type="text"
           name="q"
           value="{{ request('q') }}"
-          class="form-control pill"
-          placeholder="Search product name..."
+          class="form-control"
+          placeholder="Search products..."
         >
       </div>
 
-      <div class="col-md-3">
-        <label class="mb-1 form-label small text-muted">Category</label>
-        <select name="category" class="form-select pill">
-          <option value="">-- All Categories --</option>
+      <div class="mb-3">
+        <label class="form-label small fw-medium">Category</label>
+        <select name="category" class="form-select">
+          <option value="">All Categories</option>
           @foreach($categories as $c)
             <option value="{{ $c->id }}" @selected(request('category') == $c->id)>
               {{ $c->name }}
@@ -77,57 +81,55 @@
         </select>
       </div>
 
-      <div class="col-md-3">
-        <label class="mb-1 form-label small text-muted">Price Range</label>
-        <div class="gap-2 d-flex">
-          <input
-            type="number"
-            name="min_price"
-            value="{{ request('min_price') }}"
-            class="form-control pill"
-            placeholder="Min"
-          >
-          <input
-            type="number"
-            name="max_price"
-            value="{{ request('max_price') }}"
-            class="form-control pill"
-            placeholder="Max"
-          >
+      <div class="mb-3">
+        <label class="form-label small fw-medium">Price Range</label>
+        <div class="row g-2">
+          <div class="col-6">
+            <input
+              type="number"
+              name="min_price"
+              value="{{ request('min_price') }}"
+              class="form-control"
+              placeholder="Min"
+            >
+          </div>
+          <div class="col-6">
+            <input
+              type="number"
+              name="max_price"
+              value="{{ request('max_price') }}"
+              class="form-control"
+              placeholder="Max"
+            >
+          </div>
         </div>
       </div>
 
-      <div class="col-md-2">
-        <label class="mb-1 form-label small text-muted">Sort</label>
-        <select name="sort" class="form-select pill">
+      <div class="mb-3">
+        <label class="form-label small fw-medium">Sort By</label>
+        <select name="sort" class="form-select">
           <option value="">Default</option>
           <option value="latest" @selected(request('sort') == 'latest')>Latest</option>
-          <option value="price_asc" @selected(request('sort') == 'price_asc')>Price ↑</option>
-          <option value="price_desc" @selected(request('sort') == 'price_desc')>Price ↓</option>
-          <option value="name_asc" @selected(request('sort') == 'name_asc')>Name A→Z</option>
-          <option value="name_desc" @selected(request('sort') == 'name_desc')>Name Z→A</option>
+          <option value="price_asc" @selected(request('sort') == 'price_asc')>Price: Low to High</option>
+          <option value="price_desc" @selected(request('sort') == 'price_desc')>Price: High to Low</option>
+          <option value="name_asc" @selected(request('sort') == 'name_asc')>Name: A to Z</option>
+          <option value="name_desc" @selected(request('sort') == 'name_desc')>Name: Z to A</option>
         </select>
       </div>
 
-      <div class="gap-2 mt-2 col-12 d-flex">
-        <button class="px-4 btn btn-dark pill">
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">
           <i class="bi bi-funnel me-1"></i> Apply Filters
         </button>
-        <a class="px-4 btn btn-outline-dark pill" href="{{ route('home') }}">
-          Reset
+        <a href="{{ route('home') }}" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
         </a>
       </div>
+    </form>
+  </div>
 
-      <div class="col-12">
-        <div class="mt-2 text-muted small">
-          Showing {{ $products->firstItem() ?? 0 }} to {{ $products->lastItem() ?? 0 }}
-          of {{ $products->total() }} results
-        </div>
-      </div>
-
-    </div>
-  </form>
-
+  {{-- Right Side: Products --}}
+  <div class="col-lg-9">
   @if($products->count() == 0)
     <div class="p-4 border alert alert-light rounded-4">
       <div class="fw-bold">No products found.</div>
@@ -184,9 +186,11 @@
     </div>
 
     <div class="mt-4 d-flex justify-content-center">
-      {{ $products->withQueryString()->links() }}
+      {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
     </div>
   @endif
+  </div>
+</div>
 
 @endsection
 
@@ -220,6 +224,9 @@
         }
 
         showCartToast(data.message || `${name} added to cart!`);
+        if (data.cart_count !== undefined) {
+          updateCartBadge(data.cart_count);
+        }
       } catch (e) {
         showCartToast(e.message || 'Cannot add to cart. Please try again.');
       } finally {

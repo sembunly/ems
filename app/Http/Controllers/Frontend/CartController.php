@@ -38,6 +38,17 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
+        $cartCount = collect($cart)->sum('qty');
+
+        // Check if AJAX request
+        if (request()->expectsJson() || request()->ajax()) {
+            return response()->json([
+                'ok' => true,
+                'message' => $product->name . ' added to cart!',
+                'cart_count' => $cartCount,
+            ]);
+        }
+
         return back()->with('success', 'Product added to cart.');
     }
 

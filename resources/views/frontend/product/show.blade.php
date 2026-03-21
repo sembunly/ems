@@ -330,6 +330,9 @@
         }
 
         showCartToast(data.message || `${name} (x${qty}) added to cart!`);
+        if (data.cart_count !== undefined) {
+          updateCartBadge(data.cart_count);
+        }
       } catch (e) {
         showCartToast(e.message || 'Cannot add to cart. Please try again.');
       } finally {
