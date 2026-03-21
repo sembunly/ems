@@ -261,6 +261,9 @@
         document.getElementById('subtotal').innerText = data.subtotal;
         document.getElementById('total').innerText = data.subtotal;
         showCartToast(data.message || 'Quantity updated');
+        if (typeof updateCartBadge === 'function' && data.cart_count !== undefined) {
+          updateCartBadge(data.cart_count);
+        }
       } catch (e) {
         showCartToast('⚠️ ' + e.message);
       }
@@ -281,6 +284,9 @@
         document.getElementById('subtotal').innerText = data.subtotal;
         document.getElementById('total').innerText = data.subtotal;
         showCartToast(data.message || 'Quantity updated');
+        if (typeof updateCartBadge === 'function' && data.cart_count !== undefined) {
+          updateCartBadge(data.cart_count);
+        }
       } catch (e) {
         showCartToast('⚠️ ' + e.message);
       }
@@ -299,6 +305,9 @@
         document.getElementById('subtotal').innerText = data.subtotal;
         document.getElementById('total').innerText = data.subtotal;
         showCartToast(data.message || 'Quantity updated');
+        if (typeof updateCartBadge === 'function' && data.cart_count !== undefined) {
+          updateCartBadge(data.cart_count);
+        }
       } catch (e) {
         showCartToast('⚠️ ' + e.message);
       }
@@ -326,6 +335,9 @@
         }
 
         showCartToast(data.message || 'Item removed');
+        if (typeof updateCartBadge === 'function' && data.cart_count !== undefined) {
+          updateCartBadge(data.cart_count);
+        }
       } catch (e) {
         showCartToast('⚠️ ' + e.message);
       }

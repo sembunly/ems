@@ -7,8 +7,11 @@ use App\Http\Controllers\Frontend\CategoryController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\ProfileController;
+use App\Http\Controllers\Frontend\AboutController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
