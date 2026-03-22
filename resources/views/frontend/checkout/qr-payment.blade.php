@@ -56,11 +56,11 @@
         </ol>
       </div>
 
-      <div class="gap-2 mt-3 d-grid">
+      <!-- <div class="gap-2 mt-3 d-grid">
         <button id="btnCheckPayment" class="btn btn-dark rounded-pill" @disabled(!$qr || !$md5)>
           <i class="bi bi-check-circle me-1"></i> I Have Paid
         </button>
-      </div>
+      </div> -->
 
       <div id="statusBox" class="mt-3">
         <div class="gap-2 d-flex align-items-center justify-content-center text-muted">
