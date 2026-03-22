@@ -180,14 +180,14 @@
         </div>
       </div>
 
-      <div class="p-3 mt-3 card soft-card p-md-4">
+      <!-- <div class="p-3 mt-3 card soft-card p-md-4">
         <div class="mb-2 fw-bold">Have a coupon?</div>
         <div class="input-group">
           <input type="text" class="form-control pill" placeholder="Enter code">
           <button type="button" class="btn btn-outline-dark pill">Apply</button>
         </div>
         <div class="mt-2 text-muted small">* Coupon module optional</div>
-      </div>
+      </div> -->
     </div>
   </div>
 @endif
