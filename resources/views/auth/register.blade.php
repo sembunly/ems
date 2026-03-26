@@ -114,6 +114,12 @@
                     </button>
                   </div>
 
+                  <div class="gap-2 mt-3 d-grid">
+                    <a href="{{ route('google.redirect') }}" class="btn btn-block btn-outline-danger btn-lg fw-medium auth-form-btn">
+                      <i class="mdi mdi-google me-2"></i> Sign up with Google
+                    </a>
+                  </div>
+
                   <div class="mt-4 text-center fw-light">
                     Already have an account?
                     <a href="{{ route('login') }}" class="text-primary">Login.</a>
