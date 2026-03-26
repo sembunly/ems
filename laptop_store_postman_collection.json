@@ -1,0 +1,1085 @@
+{
+	"info": {
+		"_postman_id": "laptop-store-api",
+		"name": "Laptop Store API",
+		"description": "API collection for Laptop Store application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8000"
+		},
+		{
+			"key": "csrfToken",
+			"value": ""
+		},
+		{
+			"key": "sessionCookie",
+			"value": ""
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Register successful', function() {",
+									"    pm.response.to.have.status(302);",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}",
+									"description": "CSRF Token"
+								},
+								{
+									"key": "name",
+									"value": "John Doe",
+									"description": "User name"
+								},
+								{
+									"key": "email",
+									"value": "john.doe@example.com",
+									"description": "User email"
+								},
+								{
+									"key": "password",
+									"value": "password123",
+									"description": "Password"
+								},
+								{
+									"key": "password_confirmation",
+									"value": "password123",
+									"description": "Password confirmation"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["register"]
+						},
+						"description": "Register a new user"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Login successful', function() {",
+									"    pm.response.to.have.status(302);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}",
+									"description": "CSRF Token"
+								},
+								{
+									"key": "email",
+									"value": "user@example.com",
+									"description": "User email"
+								},
+								{
+									"key": "password",
+									"value": "password123",
+									"description": "Password"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["login"]
+						},
+						"description": "Login with email and password"
+					},
+					"response": []
+				},
+				{
+					"name": "Google OAuth Redirect",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to Google OAuth', function() {",
+									"    pm.response.to.have.status(302);",
+									"    var location = pm.response.headers.get('location');",
+									"    pm.expect(location).to.include('accounts.google.com');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/google/redirect",
+							"host": ["{{baseUrl}}"],
+							"path": ["google", "redirect"]
+						},
+						"description": "Redirect to Google OAuth consent page"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}",
+									"description": "CSRF Token"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["logout"]
+						},
+						"description": "Logout the current user"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Public Pages",
+			"item": [
+				{
+					"name": "Home",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/",
+							"host": ["{{baseUrl}}"],
+							"path": [""]
+						},
+						"description": "Get home page"
+					},
+					"response": []
+				},
+				{
+					"name": "About",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/about",
+							"host": ["{{baseUrl}}"],
+							"path": ["about"]
+						},
+						"description": "Get about page"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "List All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": ["{{baseUrl}}"],
+							"path": ["products"]
+						},
+						"description": "Get all products"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["products", "1"]
+						},
+						"description": "Get a single product by ID"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "List All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["categories"]
+						},
+						"description": "Get all categories"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/category/1/products",
+							"host": ["{{baseUrl}}"],
+							"path": ["category", "1", "products"]
+						},
+						"description": "Get products by category ID"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "View Cart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cart",
+							"host": ["{{baseUrl}}"],
+							"path": ["cart"]
+						},
+						"description": "View current user's cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Add to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "quantity",
+									"value": "1"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cart/add/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["cart", "add", "1"]
+						},
+						"description": "Add product to cart by product ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cart Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "quantity",
+									"value": "2"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cart/update/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["cart", "update", "1"]
+						},
+						"description": "Update cart item quantity"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove from Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cart/remove/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["cart", "remove", "1"]
+						},
+						"description": "Remove item from cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Clear Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cart/clear",
+							"host": ["{{baseUrl}}"],
+							"path": ["cart", "clear"]
+						},
+						"description": "Clear all items from cart"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Checkout",
+			"item": [
+				{
+					"name": "View Checkout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkout",
+							"host": ["{{baseUrl}}"],
+							"path": ["checkout"]
+						},
+						"description": "View checkout page (requires auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Process Checkout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "payment_method",
+									"value": "qr"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/checkout",
+							"host": ["{{baseUrl}}"],
+							"path": ["checkout"]
+						},
+						"description": "Process checkout (requires auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get QR Payment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkout/qr/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["checkout", "qr", "1"]
+						},
+						"description": "Get QR code for payment (requires auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Check QR Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/checkout/qr-status/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["checkout", "qr-status", "1"]
+						},
+						"description": "Check QR payment status (requires auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "transaction_id",
+									"value": "xxx"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/checkout/verify-transaction",
+							"host": ["{{baseUrl}}"],
+							"path": ["checkout", "verify-transaction"]
+						},
+						"description": "Verify transaction (requires auth)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "View Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["profile"]
+						},
+						"description": "View user profile (requires auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "_method",
+									"value": "PUT"
+								},
+								{
+									"key": "name",
+									"value": "Updated Name"
+								},
+								{
+									"key": "email",
+									"value": "updated@example.com"
+								},
+								{
+									"key": "phone",
+									"value": "1234567890"
+								},
+								{
+									"key": "address",
+									"value": "123 Main Street"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["profile"]
+						},
+						"description": "Update user profile (requires auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Profile",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "password",
+									"value": "currentpassword"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["profile"]
+						},
+						"description": "Delete user profile (requires auth)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Dashboard",
+			"item": [
+				{
+					"name": "Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/dashboard",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "dashboard"]
+						},
+						"description": "Admin dashboard (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Sales Data API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/sales-data",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sales-data"]
+						},
+						"description": "Get sales data (API endpoint)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Categories",
+			"item": [
+				{
+					"name": "List Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "categories"]
+						},
+						"description": "List all categories (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "name",
+									"value": "Gaming Laptops"
+								},
+								{
+									"key": "description",
+									"value": "High-performance gaming laptops"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/categories",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "categories"]
+						},
+						"description": "Create new category (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "_method",
+									"value": "PUT"
+								},
+								{
+									"key": "name",
+									"value": "Updated Category Name"
+								},
+								{
+									"key": "description",
+									"value": "Updated description"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/categories/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "categories", "1"]
+						},
+						"description": "Update category (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/categories/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "categories", "1"]
+						},
+						"description": "Delete category (requires admin auth)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Products",
+			"item": [
+				{
+					"name": "List Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/products",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "products"]
+						},
+						"description": "List all products (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "name",
+									"value": "MacBook Pro 16"
+								},
+								{
+									"key": "description",
+									"value": "Apple MacBook Pro with M3 chip"
+								},
+								{
+									"key": "price",
+									"value": "2499.99"
+								},
+								{
+									"key": "stock",
+									"value": "50"
+								},
+								{
+									"key": "category_id",
+									"value": "1"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/products",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "products"]
+						},
+						"description": "Create new product (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "_method",
+									"value": "PUT"
+								},
+								{
+									"key": "name",
+									"value": "Updated Product Name"
+								},
+								{
+									"key": "description",
+									"value": "Updated description"
+								},
+								{
+									"key": "price",
+									"value": "1999.99"
+								},
+								{
+									"key": "stock",
+									"value": "100"
+								},
+								{
+									"key": "category_id",
+									"value": "1"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/products/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "products", "1"]
+						},
+						"description": "Update product (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/products/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "products", "1"]
+						},
+						"description": "Delete product (requires admin auth)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Orders",
+			"item": [
+				{
+					"name": "List Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/orders",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "orders"]
+						},
+						"description": "List all orders (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "View Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/orders/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "orders", "1"]
+						},
+						"description": "View order details (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "_method",
+									"value": "PUT"
+								},
+								{
+									"key": "status",
+									"value": "completed"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/orders/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "orders", "1"]
+						},
+						"description": "Update order status (requires admin auth)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Users",
+			"item": [
+				{
+					"name": "List Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "users"]
+						},
+						"description": "List all users (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "View User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "users", "1"]
+						},
+						"description": "View user details (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Role",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formurlencoded",
+							"formurlencoded": [
+								{
+									"key": "_token",
+									"value": "{{csrfToken}}"
+								},
+								{
+									"key": "_method",
+									"value": "PUT"
+								},
+								{
+									"key": "role",
+									"value": "admin"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "users", "1"]
+						},
+						"description": "Update user role (requires admin auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "users", "1"]
+						},
+						"description": "Delete user (requires admin auth)"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

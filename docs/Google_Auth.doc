@@ -1,0 +1,158 @@
+GOOGLE SIGN UP / LOGIN FLOW (LARAVEL)
+
+1. USER ACTION
+
+* User opens website
+* User clicks "Login with Google" button
+
+2. REDIRECT TO GOOGLE
+
+* Laravel redirects user to Google OAuth page using Socialite
+
+3. USER AUTHENTICATION (GOOGLE SIDE)
+
+* User selects Google account
+* User grants permission (email, profile)
+
+4. GOOGLE CALLBACK
+
+* Google redirects back to:
+  /auth/google/callback
+
+5. BACKEND PROCESS (LARAVEL)
+
+* Laravel receives user data from Google:
+
+  * name
+  * email
+  * google_id (id from Google)
+
+6. CHECK USER IN DATABASE
+
+* Query:
+  User::where('email', google_email)->first()
+
+7. IF USER DOES NOT EXIST
+
+* Create new user:
+  User::create([
+  'name' => google_name,
+  'email' => google_email,
+  'google_id' => google_id,
+  'password' => NULL
+  ])
+
+8. IF USER EXISTS
+
+* Update google_id if not set (optional)
+
+9. LOGIN USER
+
+* Use Laravel Auth:
+  Auth::login($user)
+
+10. REDIRECT
+
+* Redirect to dashboard or homepage
+
+11. OPTIONAL: SEND EMAIL
+
+* Send welcome email ONLY when new user is created
+
+12. ERROR HANDLING
+
+* If login fails → redirect back to login page
+* Show error message
+
+13. LOGOUT
+
+* Auth::logout()
+* Redirect to login page
+
+---
+
+INSTALLATION STEPS
+
+1. INSTALL SOCIALITE
+
+* Run:
+  composer require laravel/socialite
+
+2. ADD CONFIG (config/services.php)
+
+'google' => [
+'client_id' => env('GOOGLE_CLIENT_ID'),
+'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+'redirect' => env('GOOGLE_REDIRECT_URI'),
+],
+
+3. ADD ENV VARIABLES (.env)
+
+GOOGLE_CLIENT_ID=your_client_id
+GOOGLE_CLIENT_SECRET=your_client_secret
+GOOGLE_REDIRECT_URI=http://localhost:8000/auth/google/callback
+
+---
+
+ROUTES (web.php)
+
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
+---
+
+CONTROLLER (AuthController.php)
+
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
+FUNCTION: redirectToGoogle()
+
+* return Socialite::driver('google')->redirect();
+
+FUNCTION: handleGoogleCallback()
+
+* $googleUser = Socialite::driver('google')->stateless()->user();
+
+* $user = User::where('email', $googleUser->getEmail())->first();
+
+* IF NOT FOUND:
+  $user = User::create([
+  'name' => $googleUser->getName(),
+  'email' => $googleUser->getEmail(),
+  'google_id' => $googleUser->getId(),
+  'password' => NULL,
+  ]);
+
+* Auth::login($user);
+
+* return redirect('/dashboard');
+
+---
+
+DATABASE (USERS TABLE)
+
+Add column:
+
+$table->string('google_id')->nullable();
+
+---
+
+BUTTON (BLADE)
+
+<a href="/auth/google">
+  Login with Google
+</a>
+
+---
+
+NOTES
+
+* Use stateless() if using API or JWT
+* Always keep email UNIQUE
+* Google login users don’t need password
+* Use HTTPS in production
+* Can combine with normal login system
+
+END OF FLOW

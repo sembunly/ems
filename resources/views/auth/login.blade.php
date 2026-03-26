@@ -100,6 +100,12 @@
                     </button>
                   </div>
 
+                  <div class="gap-2 mt-3 d-grid">
+                    <a href="{{ route('google.redirect') }}" class="btn btn-block btn-outline-danger btn-lg fw-medium auth-form-btn">
+                      <i class="mdi mdi-google me-2"></i> Sign in with Google
+                    </a>
+                  </div>
+
                   @if (Route::has('register'))
                     <div class="mt-4 text-center fw-light">
                       Don't have an account?
