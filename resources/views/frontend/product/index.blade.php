@@ -19,7 +19,7 @@
       <li class="breadcrumb-item">
         <a href="{{ route('categories.index') }}" class="text-decoration-none">Categories</a>
       </li>
-      <li class="breadcrumb-item active" aria-current="page">{{ $category->name }}</li>
+      <li class="breadcrumb-item active" aria-current="page">All Products</li>
     </ol>
   </nav>
 @endsection
@@ -29,7 +29,7 @@
 <div class="row g-4">
   {{-- Left Sidebar: Filters --}}
   <div class="col-lg-3">
-    <form method="GET" action="{{ route('categories.show', $category->id) }}" class="search-filter-card">
+    <form method="GET" action="{{ route('products.index') }}" class="search-filter-card">
       <h5 class="fw-bold mb-3" style="color: #4f46e5;">
         <i class="bi bi-funnel me-2"></i>Filters
       </h5>
@@ -62,7 +62,7 @@
         <button type="submit" class="btn btn-primary">
           <i class="bi bi-funnel me-1"></i> Apply Filters
         </button>
-        <a href="{{ route('categories.show', $category->id) }}" class="btn btn-outline-secondary">
+        <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">
           <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
         </a>
       </div>

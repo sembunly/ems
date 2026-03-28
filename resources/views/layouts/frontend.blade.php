@@ -67,8 +67,13 @@
 
           @auth
             <div class="dropdown">
-              <button class="btn btn-light rounded-pill dropdown-toggle px-3" data-bs-toggle="dropdown" style="border: 1px solid #e5e7eb;">
-                <i class="bi bi-person-circle me-1" style="color: #4f46e5;"></i>{{ auth()->user()->name }}
+              <button class="btn btn-light rounded-pill dropdown-toggle px-3 d-flex align-items-center" data-bs-toggle="dropdown" style="border: 1px solid #e5e7eb; gap: 0.5rem;">
+                @if(auth()->user()->avatar)
+                  <img src="{{ auth()->user()->avatar }}" alt="Avatar" class="rounded-circle" style="width: 24px; height: 24px; object-fit: cover;">
+                @else
+                  <i class="bi bi-person-circle" style="color: #4f46e5; font-size: 1.2rem;"></i>
+                @endif
+                <span class="fw-medium">{{ auth()->user()->name }}</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="border: none; border-radius: 12px;">
                 <li><a class="dropdown-item py-2" href="{{ route('profile') }}"><i class="bi bi-person me-2"></i>Profile</a></li>
