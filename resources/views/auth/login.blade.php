@@ -74,7 +74,6 @@
                       </div>
                     @enderror
                   </div>
-
                   <div class="my-2 d-flex justify-content-between align-items-center">
                     <div class="form-check">
                       <label class="form-check-label text-muted">
@@ -85,7 +84,9 @@
                         >
                         Keep me signed in
                       </label>
+                      
                     </div>
+                   <div><a href="{{ route('password.request') }}">Forgot your password?</a></div>
 
                     @if (Route::has('password.request'))
                       <a href="{{ route('password.request') }}" class="text-black auth-link">
@@ -96,20 +97,20 @@
 
                   <div class="gap-2 mt-3 d-grid">
                     <button type="submit" class="btn btn-block btn-primary btn-lg fw-medium auth-form-btn">
-                      SIGN IN
+                      LOG IN
                     </button>
-                  </div>
+                  </div> 
 
                   <div class="gap-2 mt-3 d-grid">
                     <a href="{{ route('google.redirect') }}" class="btn btn-block btn-outline-danger btn-lg fw-medium auth-form-btn">
-                      <i class="mdi mdi-google me-2"></i> Sign in with Google
+                      <i class="mdi mdi-google me-2"></i> Login with Google
                     </a>
                   </div>
 
                   @if (Route::has('register'))
                     <div class="mt-4 text-center fw-light">
                       Don't have an account?
-                      <a href="{{ route('register') }}" class="text-primary">Create</a>
+                      <a href="{{ route('register') }}" class="text-primary">Sign up a new account!</a>
                     </div>
                   @endif
                 </form>

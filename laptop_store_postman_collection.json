@@ -181,9 +181,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/google/redirect",
+							"raw": "{{baseUrl}}/auth/google",
 							"host": ["{{baseUrl}}"],
-							"path": ["google", "redirect"]
+							"path": ["auth", "google"]
 						},
 						"description": "Redirect to Google OAuth consent page"
 					},
