@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TestEmailController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProductController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -9,7 +10,12 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Auth\SocialAuthController; 
+use App\Http\Controllers\Auth\SocialAuthController;
+
+// Test Email Route (for Postman testing)
+Route::get('/api/csrf-token', [TestEmailController::class, 'getCsrfToken'])->name('test.csrf');
+Route::post('/api/test-email', [TestEmailController::class, 'sendTestEmail'])->name('test.email');
+Route::post('/api/test-invoice-email', [TestEmailController::class, 'testInvoiceEmail'])->name('test.invoice.email')->middleware('auth'); 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
