@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+
+// Mailable classes
+use App\Mail\OrderInvoiceMail;
 
 // Bakong KHQR package
 use KHQR\BakongKHQR;
@@ -112,6 +116,26 @@ class CheckoutController extends Controller
             }
 
             DB::commit();
+
+            // Load order items for email
+            $order->load('orderItems.product');
+
+            // Send Invoice Email to customer
+            try {
+                $user = Auth::user();
+                if ($user && $user->email) {
+                    Log::info("Attempting to send invoice email to: {$user->email} for order #{$order->id}");
+                    
+                    Mail::to($user->email)->send(new OrderInvoiceMail($order));
+                    
+                    Log::info("SUCCESS: Invoice email sent to {$user->email} for order #{$order->id}");
+                } else {
+                    Log::warning("Cannot send invoice email: User email not available for order #{$order->id}");
+                }
+            } catch (\Exception $e) {
+                Log::error("FAILED to send invoice email to {$user->email} for order #{$order->id}. Error: " . $e->getMessage());
+                Log::error("Exception details: " . $e->getTraceAsString());
+            }
 
             // Send Telegram notification only for COD
             if (! $isQR) {
@@ -313,6 +337,23 @@ class CheckoutController extends Controller
                 // Send Telegram notification
                 $this->sendTelegramMessage($order, $items, 'QR Payment Confirmed');
 
+                // Send Invoice Email to customer
+                try {
+                    $user = \App\Models\User::find($order->user_id);
+                    if ($user && $user->email) {
+                        Log::info("Attempting to send invoice email to: {$user->email} for order #{$order->id} (QR payment verified)");
+                        
+                        Mail::to($user->email)->send(new OrderInvoiceMail($order));
+                        
+                        Log::info("SUCCESS: Invoice email sent to {$user->email} for order #{$order->id} (QR payment verified)");
+                    } else {
+                        Log::warning("Cannot send invoice email: User email not available for order #{$order->id}");
+                    }
+                } catch (\Exception $e) {
+                    Log::error("FAILED to send invoice email to {$user->email} for order #{$order->id}. Error: " . $e->getMessage());
+                    Log::error("Exception details: " . $e->getTraceAsString());
+                }
+
                 return response()->json([
                     'success' => true,
                     'paid' => true,
@@ -386,6 +427,23 @@ class CheckoutController extends Controller
             }
 
             $this->sendTelegramMessage($order, $items, 'QR Payment Confirmed');
+
+            // Send Invoice Email to customer
+            try {
+                $user = \App\Models\User::find($order->user_id);
+                if ($user && $user->email) {
+                    Log::info("Attempting to send invoice email to: {$user->email} for order #{$order->id} (QR payment confirmed)");
+                    
+                    Mail::to($user->email)->send(new OrderInvoiceMail($order));
+                    
+                    Log::info("SUCCESS: Invoice email sent to {$user->email} for order #{$order->id} (QR payment confirmed)");
+                } else {
+                    Log::warning("Cannot send invoice email: User email not available for order #{$order->id}");
+                }
+            } catch (\Exception $e) {
+                Log::error("FAILED to send invoice email to {$user->email} for order #{$order->id}. Error: " . $e->getMessage());
+                Log::error("Exception details: " . $e->getTraceAsString());
+            }
 
             return redirect()->route('checkout.success', $order->id)
                 ->with('success', 'QR payment confirmed successfully.');
