@@ -21,6 +21,8 @@ class Order extends Model
         'payment_token',
     ];
 
+    protected $appends = ['items_summary'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -29,5 +31,20 @@ class Order extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function getItemsSummaryAttribute()
+    {
+        // prevent error if relationship not loaded
+        if (!$this->relationLoaded('orderItems')) {
+            $this->load('orderItems.product');
+        }
+
+        return $this->orderItems->map(function ($item) {
+            return [
+                'product_name' => optional($item->product)->name,
+                'quantity' => $item->quantity,
+            ];
+        });
     }
 }
