@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +11,10 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        return view('frontend.profile.index');
+        $user = auth()->user();
+        $orders = $user->orders()->with('orderItems.product')->latest()->get();
+
+        return view('frontend.profile.index', compact('user', 'orders'));
     }
 
     public function edit()
@@ -32,5 +36,13 @@ class ProfileController extends Controller
         $user->save();
 
         return redirect()->route('profile')->with('success', 'Profile updated successfully');
+    }
+
+    public function orderHistory()
+    {
+        $user = auth()->user();
+        $orders = $user->orders()->with('orderItems.product')->latest()->get();
+
+        return view('frontend.profile.orders', compact('orders'));
     }
 }
