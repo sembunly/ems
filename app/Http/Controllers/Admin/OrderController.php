@@ -10,13 +10,13 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::latest()->get();
+        $orders = Order::with('orderItems.product')->latest()->get();
         return view('admin.orders.index', compact('orders'));
     }
 
     public function edit(string $id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with('orderItems.product')->findOrFail($id);
         return view('admin.orders.edit', compact('order'));
     }
 
@@ -41,6 +41,7 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         $order = Order::findOrFail($id);
+        $order->orderItems()->delete();
         $order->delete();
 
         return redirect()->route('admin.orders.index')
