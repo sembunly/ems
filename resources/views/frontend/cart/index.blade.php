@@ -180,14 +180,14 @@
         </div>
       </div>
 
-      <div class="p-3 mt-3 card soft-card p-md-4">
+      <!-- <div class="p-3 mt-3 card soft-card p-md-4">
         <div class="mb-2 fw-bold">Have a coupon?</div>
         <div class="input-group">
           <input type="text" class="form-control pill" placeholder="Enter code">
           <button type="button" class="btn btn-outline-dark pill">Apply</button>
         </div>
         <div class="mt-2 text-muted small">* Coupon module optional</div>
-      </div>
+      </div> -->
     </div>
   </div>
 @endif
@@ -261,6 +261,9 @@
         document.getElementById('subtotal').innerText = data.subtotal;
         document.getElementById('total').innerText = data.subtotal;
         showCartToast(data.message || 'Quantity updated');
+        if (typeof updateCartBadge === 'function' && data.cart_count !== undefined) {
+          updateCartBadge(data.cart_count);
+        }
       } catch (e) {
         showCartToast('⚠️ ' + e.message);
       }
@@ -281,6 +284,9 @@
         document.getElementById('subtotal').innerText = data.subtotal;
         document.getElementById('total').innerText = data.subtotal;
         showCartToast(data.message || 'Quantity updated');
+        if (typeof updateCartBadge === 'function' && data.cart_count !== undefined) {
+          updateCartBadge(data.cart_count);
+        }
       } catch (e) {
         showCartToast('⚠️ ' + e.message);
       }
@@ -299,6 +305,9 @@
         document.getElementById('subtotal').innerText = data.subtotal;
         document.getElementById('total').innerText = data.subtotal;
         showCartToast(data.message || 'Quantity updated');
+        if (typeof updateCartBadge === 'function' && data.cart_count !== undefined) {
+          updateCartBadge(data.cart_count);
+        }
       } catch (e) {
         showCartToast('⚠️ ' + e.message);
       }
@@ -326,6 +335,9 @@
         }
 
         showCartToast(data.message || 'Item removed');
+        if (typeof updateCartBadge === 'function' && data.cart_count !== undefined) {
+          updateCartBadge(data.cart_count);
+        }
       } catch (e) {
         showCartToast('⚠️ ' + e.message);
       }

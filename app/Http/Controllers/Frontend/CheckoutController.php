@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+
+// Mailable classes
+use App\Mail\OrderInvoiceMail;
 
 // Bakong KHQR package
 use KHQR\BakongKHQR;
@@ -66,7 +70,7 @@ class CheckoutController extends Controller
             foreach ($cart as $item) {
                 $product = Product::where('id', $item['id'])->lockForUpdate()->first();
 
-                if (! $product) {
+                if (!$product) {
                     DB::rollBack();
                     return redirect()->route('cart.index')->with('error', 'Product not found.');
                 }
@@ -106,15 +110,35 @@ class CheckoutController extends Controller
                 ]);
 
                 // Reduce stock immediately only for COD
-                if (! $isQR) {
+                if (!$isQR) {
                     $products[$item['id']]->decrement('stock', $item['qty']);
                 }
             }
 
             DB::commit();
 
+            // Load order items for email
+            $order->load('orderItems.product');
+
+            // Send Invoice Email to customer
+            try {
+                $user = Auth::user();
+                if ($user && $user->email) {
+                    Log::info("Attempting to send invoice email to: {$user->email} for order #{$order->id}");
+
+                    Mail::to($user->email)->send(new OrderInvoiceMail($order));
+
+                    Log::info("SUCCESS: Invoice email sent to {$user->email} for order #{$order->id}");
+                } else {
+                    Log::warning("Cannot send invoice email: User email not available for order #{$order->id}");
+                }
+            } catch (\Exception $e) {
+                Log::error("FAILED to send invoice email to {$user->email} for order #{$order->id}. Error: " . $e->getMessage());
+                Log::error("Exception details: " . $e->getTraceAsString());
+            }
+
             // Send Telegram notification only for COD
-            if (! $isQR) {
+            if (!$isQR) {
                 $telegramItems = [];
 
                 foreach ($cart as $item) {
@@ -241,7 +265,7 @@ class CheckoutController extends Controller
             $token = env('BAKONG_TOKEN');
 
             // Bakong token required
-            if (! $token) {
+            if (!$token) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Bakong token not configured.',
@@ -272,7 +296,7 @@ class CheckoutController extends Controller
                 foreach ($order->orderItems as $orderItem) {
                     $product = Product::where('id', $orderItem->product_id)->lockForUpdate()->first();
 
-                    if (! $product) {
+                    if (!$product) {
                         DB::rollBack();
 
                         return response()->json([
@@ -312,6 +336,23 @@ class CheckoutController extends Controller
 
                 // Send Telegram notification
                 $this->sendTelegramMessage($order, $items, 'QR Payment Confirmed');
+
+                // Send Invoice Email to customer
+                try {
+                    $user = \App\Models\User::find($order->user_id);
+                    if ($user && $user->email) {
+                        Log::info("Attempting to send invoice email to: {$user->email} for order #{$order->id} (QR payment verified)");
+
+                        Mail::to($user->email)->send(new OrderInvoiceMail($order));
+
+                        Log::info("SUCCESS: Invoice email sent to {$user->email} for order #{$order->id} (QR payment verified)");
+                    } else {
+                        Log::warning("Cannot send invoice email: User email not available for order #{$order->id}");
+                    }
+                } catch (\Exception $e) {
+                    Log::error("FAILED to send invoice email to {$user->email} for order #{$order->id}. Error: " . $e->getMessage());
+                    Log::error("Exception details: " . $e->getTraceAsString());
+                }
 
                 return response()->json([
                     'success' => true,
@@ -356,7 +397,7 @@ class CheckoutController extends Controller
             foreach ($order->orderItems as $orderItem) {
                 $product = Product::where('id', $orderItem->product_id)->lockForUpdate()->first();
 
-                if (! $product) {
+                if (!$product) {
                     DB::rollBack();
                     return redirect()->back()->with('error', 'Product not found.');
                 }
@@ -386,6 +427,23 @@ class CheckoutController extends Controller
             }
 
             $this->sendTelegramMessage($order, $items, 'QR Payment Confirmed');
+
+            // Send Invoice Email to customer
+            try {
+                $user = \App\Models\User::find($order->user_id);
+                if ($user && $user->email) {
+                    Log::info("Attempting to send invoice email to: {$user->email} for order #{$order->id} (QR payment confirmed)");
+
+                    Mail::to($user->email)->send(new OrderInvoiceMail($order));
+
+                    Log::info("SUCCESS: Invoice email sent to {$user->email} for order #{$order->id} (QR payment confirmed)");
+                } else {
+                    Log::warning("Cannot send invoice email: User email not available for order #{$order->id}");
+                }
+            } catch (\Exception $e) {
+                Log::error("FAILED to send invoice email to {$user->email} for order #{$order->id}. Error: " . $e->getMessage());
+                Log::error("Exception details: " . $e->getTraceAsString());
+            }
 
             return redirect()->route('checkout.success', $order->id)
                 ->with('success', 'QR payment confirmed successfully.');
@@ -437,7 +495,7 @@ class CheckoutController extends Controller
         $chatId = config('services.telegram.chat_id');
 
         // Stop if Telegram config missing
-        if (! $botToken || ! $chatId) {
+        if (!$botToken || !$chatId) {
             Log::warning('Telegram config missing.');
             return;
         }
@@ -469,7 +527,7 @@ class CheckoutController extends Controller
                 'text' => $message,
             ]);
 
-            if (! $response->successful()) {
+            if (!$response->successful()) {
                 Log::error('Telegram API error', [
                     'status' => $response->status(),
                     'body' => $response->body(),
