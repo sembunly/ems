@@ -52,13 +52,13 @@
         <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#orders" aria-expanded="false" aria-controls="orders">
                 <i class="menu-icon mdi mdi-cart"></i>
-                <span class="menu-title">Orders</span>
+                <span class="menu-title">Report</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="orders">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.orders.index') }}">All Orders</a>
+                        <a class="nav-link" href="{{ route('admin.orders.index') }}">Sale Report</a>
                     </li>
                 </ul>
             </div>

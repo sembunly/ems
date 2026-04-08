@@ -5,12 +5,29 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OrdersExport;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('orderItems.product')->latest()->get();
+        $from = $request->query('from');
+        $to = $request->query('to');
+
+        $orders = Order::with('orderItems.product')
+            ->when($from && $to, function ($q) use ($from, $to) {
+                $q->whereBetween('created_at', [$from, $to]);
+            })
+            ->when($from && !$to, function ($q) use ($from) {
+                $q->whereDate('created_at', '>=', $from);
+            })
+            ->when(!$from && $to, function ($q) use ($to) {
+                $q->whereDate('created_at', '<=', $to);
+            })
+            ->latest()
+            ->get();
+
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -47,4 +64,12 @@ class OrderController extends Controller
         return redirect()->route('admin.orders.index')
             ->with('success', 'Order deleted successfully');
     }
+
+    public function export(Request $request)
+{
+    return Excel::download(
+        new OrdersExport($request->from, $request->to),
+        'orders.xlsx'
+    );
+}
 }

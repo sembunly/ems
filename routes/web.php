@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+    Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
     Route::resource('products', AdminProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('users', UserController::class);
