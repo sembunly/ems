@@ -11,18 +11,18 @@ use App\Http\Controllers\Api\UserApiController;
 Route::get('/sales-data', [DashboardController::class, 'salesData']);
 
 // API routes for products
-Route::apiResource('products', ProductApiController::class);
+// Route::apiResource('products', ProductApiController::class);
 
-// API routes for categories
-Route::apiResource('categories', CategoryApiController::class);
+// // API routes for categories
+// Route::apiResource('categories', CategoryApiController::class);
 
-// API routes for order items
-Route::apiResource('order-items', OrderItemApiController::class);
+// // API routes for order items
+// Route::apiResource('order-items', OrderItemApiController::class);
 
-// API routes for orders
-Route::apiResource('orders', OrderApiController::class);
+// // API routes for orders
+// Route::apiResource('orders', OrderApiController::class);
 
-// API routes for users
-Route::apiResource('users', UserApiController::class);
+// // API routes for users
+// Route::apiResource('users', UserApiController::class);
 
 
