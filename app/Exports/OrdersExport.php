@@ -21,30 +21,51 @@ class OrdersExport implements FromCollection, WithHeadings, WithStyles
 
     public function collection()
     {
-        return Order::with('orderItems.product')
+        $orders = Order::with('orderItems.product')
             ->when($this->from && $this->to, function ($q) {
                 $q->whereBetween('created_at', [$this->from, $this->to]);
             })
-            ->get()
-            ->map(function ($order) {
-                return [
-                    'ID' => $order->id,
-                    'Name' => $order->full_name,
-                    'Items' => $order->orderItems->pluck('product.name')->join(', '),
-                    'QTY' => $order->orderItems->sum('quantity'),
-                    'Phone' => $order->phone,
-                    'Address' => $order->address,
-                    'Total' => $order->total_amount,
-                    'Status' => $order->status,
-                    'Date' => $order->created_at,
-                ];
-            });
+            ->get();
+
+        $rows = $orders->map(function ($order) {
+            return [
+                'ID' => $order->id,
+                'Name' => $order->full_name,
+                'Items' => $order->orderItems->pluck('product.name')->join(', '),
+                'QTY' => $order->orderItems->sum('quantity'),
+                'Phone' => $order->phone,
+                'Address' => $order->address,
+                'Total' => $order->total_amount,
+                'Status' => $order->status,
+                'Date' => $order->created_at,
+            ];
+        });
+
+        // Append a totals summary row with total quantity and total amount
+        $totalQty = $orders->sum(function ($o) {
+            return $o->orderItems->sum('quantity');
+        });
+        $totalAmount = $orders->sum('total_amount');
+
+        $rows->push([
+            'ID' => '',
+            'Name' => 'TOTAL',
+            'Items' => '',
+            'QTY' => $totalQty,
+            'Phone' => '',
+            'Address' => '',
+            'Total' => $totalAmount,
+            'Status' => '',
+            'Date' => '',
+        ]);
+
+        return $rows;
     }
 
     public function headings(): array
     {
         return [
-            'N0.',
+            'No.',
             'Name',
             'Items',
             'QTY',
