@@ -47,8 +47,8 @@ The system allows users to browse products, add them to a cart, and complete the
 ## 1. Clone Repository
 
 ```
-git clone https://github.com/sembunly/laptop-store.git
-cd laptop-store
+git clone https://github.com/sembunly/Ecom-Web.git
+cd Ecom-Web
 ```
 
 ## 2. Install Dependencies
