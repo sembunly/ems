@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Auth\SocialAuthController;
 
 // Test Email Route (for Postman testing)
@@ -43,6 +44,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('categories', CategoryController::class);
     Route::resource('users', UserController::class);
     Route::resource('orders', OrderController::class);
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
 });
 
 require __DIR__.'/frontend/web.php';

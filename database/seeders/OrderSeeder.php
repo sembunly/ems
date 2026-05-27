@@ -21,18 +21,20 @@ class OrderSeeder extends Seeder
         }
 
         $statuses = ['pending', 'processing', 'completed', 'cancelled'];
+        $paymentMethods = ['cod', 'card', 'paypal'];
 
-        for ($i = 0; $i < 50; $i++) {
+        // Create 100 orders
+        for ($i = 0; $i < 100; $i++) {
             $user = $users->random();
 
-            // Most people buy 1 laptop, rarely 2
-            $numProducts = rand(1, 10) <= 8 ? 1 : 2;
+            // Most people buy 1-2 laptops, rarely 3
+            $numProducts = rand(1, 10) <= 7 ? 1 : (rand(1, 10) <= 8 ? 2 : 3);
             $orderProducts = $products->random($numProducts);
             $totalAmount = 0;
             $items = [];
 
             foreach ($orderProducts as $product) {
-                $qty = 1;
+                $qty = rand(1, 10) <= 9 ? 1 : 2; // Usually 1, sometimes 2
                 $price = $product->price;
                 $totalAmount += $price * $qty;
 
@@ -43,19 +45,21 @@ class OrderSeeder extends Seeder
                 ];
             }
 
-            // Random date between Jan 2025 and Mar 2026
+            // Random date between Jan 2025 and Apr 2026
             $start = strtotime('2025-01-01');
-            $end = strtotime('2026-03-13');
+            $end = strtotime('2026-04-09');
             $date = date('Y-m-d H:i:s', rand($start, $end));
 
             $order = Order::create([
                 'user_id' => $user->id,
                 'full_name' => $user->name,
                 'phone' => '05' . rand(10000000, 99999999),
-                'address' => fake()->address(),
+                'address' => fake()->streetAddress() . ', ' . fake()->city() . ', ' . fake()->country(),
                 'note' => rand(0, 1) ? fake()->sentence() : null,
                 'total_amount' => $totalAmount,
                 'status' => $statuses[array_rand($statuses)],
+                'payment_method' => $paymentMethods[array_rand($paymentMethods)],
+                'payment_token' => rand(0, 1) ? fake()->uuid() : null,
                 'created_at' => $date,
                 'updated_at' => $date,
             ]);
