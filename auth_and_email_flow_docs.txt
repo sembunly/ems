@@ -1,0 +1,50 @@
+Application Features Documentation
+This document outlines the workflows and implementation details for two key features in the Laptop Store application: Google OAuth Sign-in and the Automated Email System.
+
+--------------------------------------------------
+
+1. Google Account Sign-In (OAuth)
+The application leverages Laravel Socialite to implement a seamless, secure "Sign in with Google" flow.
+
+Flow Summary:
+1. Initiation: The user clicks "Sign in with Google" on the login page.
+2. Redirection: The route directs the request to SocialAuthController@redirectToGoogle. The application sends the user to the Google OAuth consent screen, establishing a stateless connection.
+3. Google Authentication: The user logs in via Google and grants permission to the app.
+4. Callback Processing: Google redirects the user back to the application to SocialAuthController@handleGoogleCallback along with an authorization code.
+5. Account Linking / Creation: 
+   - Uses the code to retrieve the Google Profile (Name, Email, Avatar, Google ID).
+   - Case 1 (Existing Account): If an account exists with the same email but no google_id, the system links the Google account automatically (saves the Google ID and updates the avatar).
+   - Case 2 (Returning Google User): Updates the avatar if it changed and logs the user in.
+   - Case 3 (New User): If the email doesn't exist, the system creates a new user profile with the default role of 'customer', auto-verifies the email timestamp, skips the password requirement, and initializes a new Shopping Cart (Cart).
+6. Authentication & Redirection: The user is securely logged in using Laravel's Auth loginUser method and redirected appropriately (Admin to Dashboard, Customer to the Products page).
+
+Important Files:
+- app/Http/Controllers/Auth/SocialAuthController.php: Handles tracking, account creation, and redirection.
+- .env: Holds the credentials (GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI).
+- config/services.php: Registers the Google OAuth credentials with Laravel Socialite.
+
+--------------------------------------------------
+
+2. Order Invoice Email System
+The application uses Laravel Mailables paired with SendGrid to dispatch invoice emails when users place an order or verify a payment. To ensure fast checkout experiences, email sending is pushed to a background Queue.
+
+Flow Summary:
+1. Trigger Points: Emails are dispatched in CheckoutController.php during two scenarios:
+   - When a customer successfully places a Cash on Delivery (COD) order.
+   - When a customer's QR Payment is successfully verified through Bakong.
+2. The Mailable Class (OrderInvoiceMail.php):
+   - The email logic is isolated within OrderInvoiceMail.php. 
+   - It implements the ShouldQueue interface. This is crucial because it ensures that sending the email doesn't freeze the checkout page. Instead, it gets instantly dispatched to a database queue.
+   - It collects the related Order variables ($order, $items, $total) and injects them into the emails.orders.invoice Blade view template.
+3. Processing the Queue:
+   - The QUEUE_CONNECTION in the .env file is set to database.
+   - The order data waits in the database jobs table until a queue worker picks it up.
+   - Using the command "php artisan queue:work" running in a separate terminal process, the worker processes the pending job.
+4. Delivery via SendGrid: 
+   - The worker establishes an SMTP connection to SendGrid (using credentials defined in the .env file (MAIL_HOST, MAIL_USERNAME, MAIL_PASSWORD)) and physically sends the email to the customer's inbox.
+
+Important Files:
+- app/Mail/OrderInvoiceMail.php: Defines the subject, template, and queue behavior.
+- resources/views/emails/orders/invoice.blade.php: The HTML template seen by the user.
+- app/Http/Controllers/Frontend/CheckoutController.php: Where the Mail::to()->send() functionality is triggered.
+- .env: Holds queue configurations and SendGrid API Keys.

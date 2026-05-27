@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.10.1",
         "sendgrid/sendgrid": "^8.1",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/laravel-permission": "*",
         "symfony/sendgrid-mailer": "^8.0"
     },
     "require-dev": {

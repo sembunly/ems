@@ -83,5 +83,13 @@
             </div>
         </li>
 
+        <!-- Roles & Permissions -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.roles.index') }}">
+                <i class="menu-icon mdi mdi-shield-key-outline"></i>
+                <span class="menu-title">Roles & Permissions</span>
+            </a>
+        </li>
+
     </ul>
 </nav>
