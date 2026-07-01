@@ -26,6 +26,9 @@ class CartController extends Controller
 
         if (isset($cart[$product->id])) {
             $cart[$product->id]['qty'] += $qty;
+            $cart[$product->id]['name'] = $product->name;
+            $cart[$product->id]['price'] = $product->price;
+            $cart[$product->id]['image'] = $product->image;
         } else {
             $cart[$product->id] = [
                 'id' => $product->id,

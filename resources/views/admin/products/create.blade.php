@@ -45,12 +45,12 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Price</label>
-                            <input type="number" step="0.01" name="price" class="form-control" placeholder="Enter price">
+                            <input type="number" step="0.01" min="0" name="price" class="form-control" placeholder="Enter price">
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Stock</label>
-                            <input type="number" name="stock" class="form-control" placeholder="Enter stock quantity">
+                            <input type="number" min="0" name="stock" class="form-control" placeholder="Enter stock quantity">
                         </div>
 
                         <div class="col-md-6 mb-3">

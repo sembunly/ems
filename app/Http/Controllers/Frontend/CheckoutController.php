@@ -65,6 +65,7 @@ class CheckoutController extends Controller
         try {
             $total = 0;
             $products = [];
+            $checkoutItems = [];
 
             // Check product existence and stock before creating order
             foreach ($cart as $item) {
@@ -81,7 +82,17 @@ class CheckoutController extends Controller
                 }
 
                 $products[$product->id] = $product;
-                $total += $item['price'] * $item['qty'];
+                $price = $product->price;
+                $qty = (int) $item['qty'];
+
+                $checkoutItems[$product->id] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $price,
+                    'qty' => $qty,
+                ];
+
+                $total += $price * $qty;
             }
 
             $paymentMethod = $request->payment_method;
@@ -101,7 +112,7 @@ class CheckoutController extends Controller
             ]);
 
             // Create order items
-            foreach ($cart as $item) {
+            foreach ($checkoutItems as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item['id'],
@@ -141,7 +152,7 @@ class CheckoutController extends Controller
             if (!$isQR) {
                 $telegramItems = [];
 
-                foreach ($cart as $item) {
+                foreach ($checkoutItems as $item) {
                     $telegramItems[] = [
                         'name' => $item['name'] ?? 'Product',
                         'qty' => $item['qty'],

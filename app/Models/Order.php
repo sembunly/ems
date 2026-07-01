@@ -21,6 +21,11 @@ class Order extends Model
         'payment_token',
     ];
 
+    protected $casts = [
+        'user_id' => 'integer',
+        'total_amount' => 'decimal:2',
+    ];
+
     protected $appends = ['items_summary'];
 
     public function user()

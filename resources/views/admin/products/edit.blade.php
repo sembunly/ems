@@ -43,12 +43,12 @@
 
 <div class="mb-3 col-md-6">
 <label>Price</label>
-<input type="number" name="price" value="{{ $product->price }}" class="form-control">
+<input type="number" step="0.01" min="0" name="price" value="{{ old('price', number_format($product->price, 2, '.', '')) }}" class="form-control">
 </div>
 
 <div class="mb-3 col-md-6">
 <label>Stock</label>
-<input type="number" name="stock" value="{{ $product->stock }}" class="form-control">
+<input type="number" min="0" name="stock" value="{{ old('stock', $product->stock) }}" class="form-control">
 </div>
 
 <div class="mb-3 col-md-6">
