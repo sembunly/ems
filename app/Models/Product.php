@@ -24,6 +24,12 @@ class Product extends Model
         'screen_size',
     ];
 
+    protected $casts = [
+        'category_id' => 'integer',
+        'price' => 'decimal:2',
+        'stock' => 'integer',
+    ];
+
     public function category()
     {
         return $this->belongsTo(\App\Models\Category::class);
