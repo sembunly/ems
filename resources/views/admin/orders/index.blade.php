@@ -3,6 +3,12 @@
 @section('title', 'Order List')
 
 @section('content')
+    @php
+        $canExportReports = $canAccessAdmin('reports', 'export');
+        $canEditOrders = $canAccessAdmin('orders', 'edit');
+        $canDeleteOrders = $canAccessAdmin('orders', 'destroy');
+        $canUseOrderActions = $canEditOrders || $canDeleteOrders;
+    @endphp
 
     <form method="GET" class="gap-2 mb-3 d-flex align-items-end">
         <div class="d-flex flex-column">
@@ -20,16 +26,18 @@
             Clear
         </a>
 
-        <a href="{{ route('admin.orders.export', [
-        'from' => request('from'),
-        'to' => request('to')
-    ]) }}" class="btn btn-success">
-            Export Excel
-        </a>
+        @if($canExportReports)
+            <a href="{{ route('admin.orders.export', [
+                'from' => request('from'),
+                'to' => request('to')
+            ]) }}" class="btn btn-success">
+                Export Excel
+            </a>
+        @endif
     </form>
 
     <div class="mb-3 d-flex justify-content-between align-items-center">
-        <h4 class="m-0">Order List</h4>
+        <h4 class="m-0">Sale Report</h4>
     </div>
 
     <div class="shadow-sm card">
@@ -50,7 +58,9 @@
                             <th style="width:140px;">Total Amount</th>
                             <th style="width:120px;">Status</th>
                             <th style="width:180px;">Order At</th>
-                            <th style="width:200px;" class="text-center">Actions</th>
+                            @if($canUseOrderActions)
+                                <th style="width:200px;" class="text-center">Actions</th>
+                            @endif
                         </tr>
                     </thead>
 
@@ -90,11 +100,15 @@
 
                                 <td>{{ $order->created_at }}</td>
 
+                                @if($canUseOrderActions)
                                 <td class="text-center">
+                                    @if($canEditOrders)
                                     <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-warning btn-sm">
                                         Edit
                                     </a>
+                                    @endif
 
+                                    @if($canDeleteOrders)
                                     <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST"
                                         style="display:inline-block">
                                         @csrf
@@ -105,11 +119,13 @@
                                             Delete
                                         </button>
                                     </form>
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="12" class="p-4 text-center text-muted">
+                                <td colspan="{{ $canUseOrderActions ? 12 : 11 }}" class="p-4 text-center text-muted">
                                     No orders found
                                 </td>
                             </tr>

@@ -3,6 +3,11 @@
 @section('title','User List')
 
 @section('content')
+@php
+    $canEditUsers = $canAccessAdmin('users', 'edit');
+    $canDeleteUsers = $canAccessAdmin('users', 'destroy');
+    $canUseUserActions = $canEditUsers || $canDeleteUsers;
+@endphp
 
 <div class="mb-3 d-flex justify-content-between align-items-center">
     <h4 class="m-0">User List</h4>
@@ -19,7 +24,9 @@
 <th>Name</th>
 <th>Email</th>
 <th style="width:120px;">Role</th>
+@if($canUseUserActions)
 <th style="width:200px;" class="text-center">Actions</th>
+@endif
 </tr>
 </thead>
 
@@ -47,12 +54,16 @@
 @endif
 </td>
 
+@if($canUseUserActions)
 <td class="text-center">
 
+@if($canEditUsers)
 <a href="{{ route('admin.users.edit',$user->id) }}"
 class="btn btn-warning btn-sm">
 Edit </a>
+@endif
 
+@if($canDeleteUsers)
 <form action="{{ route('admin.users.destroy',$user->id) }}"
 method="POST"
 style="display:inline-block">
@@ -65,15 +76,17 @@ onclick="return confirm('Delete this user?')">
 Delete </button>
 
 </form>
+@endif
 
 </td>
+@endif
 
 </tr>
 
 @empty
 
 <tr>
-<td colspan="5" class="p-4 text-center text-muted">
+<td colspan="{{ $canUseUserActions ? 5 : 4 }}" class="p-4 text-center text-muted">
 No users found
 </td>
 </tr>

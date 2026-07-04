@@ -82,14 +82,6 @@
             <p class="mb-0 text-secondary small">+855 XXX XXX XXX</p>
           </div>
 
-          {{-- Member 5 --}}
-          <div class="col-md-2 col-6">
-            <img src="/images/team_members/david.jpg" class="mb-3 img-fluid rounded-circle"
-                style="height:160px; width:160px; object-fit:cover;">
-            <h6 class="mb-1 fw-bold">Name: David</h6>
-            <p class="mb-0 text-secondary small">+855 XXX XXX XXX</p>
-          </div>
-
         </div>
       </div>
     </div>
