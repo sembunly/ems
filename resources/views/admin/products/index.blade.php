@@ -3,14 +3,23 @@
 @section('title', 'Products')
 
 @section('content')
+@php
+    $canCreateProducts = $canAccessAdmin('products', 'create');
+    $canEditProducts = $canAccessAdmin('products', 'edit');
+    $canDeleteProducts = $canAccessAdmin('products', 'destroy');
+    $canUseProductActions = $canEditProducts || $canDeleteProducts;
+@endphp
+
 <div class="row">
     <div class="col-sm-12">
         <div class="home-tab">
             <div class="mb-4 d-sm-flex align-items-center justify-content-between border-bottom">
                 <h3 class="mb-0">Product List</h3>
+                @if($canCreateProducts)
                 <a href="{{ route('admin.products.create') }}" class="btn btn-info">
                     Add Product
                 </a>
+                @endif
             </div>
 
             @if(session('success'))
@@ -39,7 +48,9 @@
                                     <th>Screen Size</th>
                                     <th>Description</th>
                                     <th>Created At</th>
-                                    <th>Actions</th>
+                                    @if($canUseProductActions)
+                                        <th>Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,7 +58,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                             <td>
-                                               @if($product->image)
+                                                @if($product->image)
                                                     <img src="{{ asset($product->image) }}"
                                                         alt="{{ $product->name }}"
                                                         width="70"
@@ -69,12 +80,16 @@
                                         <td>{{ $product->screen_size }}</td>
                                         <td>{{ $product->description }}</td>
                                         <td>{{ $product->created_at ? $product->created_at->format('d-m-Y') : '-' }}</td>
+                                        @if($canUseProductActions)
                                         <td>
+                                            @if($canEditProducts)
                                             <a href="{{ route('admin.products.edit', $product->id) }}"
                                             class="btn btn-sm btn-info">
                                             Edit
                                             </a>
+                                            @endif
 
+                                            @if($canDeleteProducts)
                                             <form action="{{ route('admin.products.destroy', $product->id) }}"
                                                 method="POST"
                                                 style="display:inline-block;">
@@ -86,7 +101,9 @@
                                                     Delete
                                                 </button>
                                             </form>
+                                            @endif
                                         </td>
+                                        @endif
                                     </tr>
                                 @empty
                                     <tr>
