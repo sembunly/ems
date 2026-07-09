@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Verify Email - GenZ Electronics</title>
+    <title>Verify Email - Store Electronics</title>
 
     <link rel="stylesheet" href="{{ asset('staradmin/vendors/feather/feather.css') }}">
     <link rel="stylesheet" href="{{ asset('staradmin/vendors/mdi/css/materialdesignicons.min.css') }}">
@@ -26,7 +26,7 @@
               <div class="px-4 py-5 text-left auth-form-light px-sm-5">
                 
                 <div class="text-center">
-                  <h1>GenZ Electronics</h1><br>
+                  <h1>Store Electronics</h1><br>
                 </div>
 
                 <h4>Verify your email address</h4>
@@ -53,10 +53,10 @@
                   </div>
                 </form>
 
-                <div class="text-center mt-4 fw-light">
+                <div class="mt-4 text-center fw-light">
                   <form method="POST" action="{{ route('logout') }}" class="d-inline">
                     @csrf
-                    <button type="submit" class="btn btn-link p-0 text-primary" style="background: none; border: none;">
+                    <button type="submit" class="p-0 btn btn-link text-primary" style="background: none; border: none;">
                       Log out
                     </button>
                   </form>

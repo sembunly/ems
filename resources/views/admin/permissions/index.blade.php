@@ -4,6 +4,25 @@
 
 @section('content')
 
+<style>
+    .module-type-header {
+        background-color: #1F3BB3;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .module-detail {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 0.25s ease, opacity 0.2s ease;
+    }
+
+    .module-detail.is-open {
+        opacity: 1;
+    }
+</style>
+
 <div class="mb-3 d-flex justify-content-between align-items-center">
     <h4 class="m-0">Permissions</h4>
 </div>
@@ -40,7 +59,7 @@
             </div>
 
             <div class="col-md-6">
-                <form method="POST" action="{{ route('admin.permissions.groups.store') }}" class="d-flex gap-2">
+                <form method="POST" action="{{ route('admin.permissions.groups.store') }}" class="gap-2 d-flex">
                     @csrf
                     <div class="flex-grow-1">
                         <label class="form-label fw-semibold color-black">Create New Group</label>
@@ -120,44 +139,46 @@
             <div class="permission-tree">
                 @foreach($moduleTypes as $type)
                     <div class="mb-3 border rounded module-type-section" data-module-type="{{ $type->id }}">
-                        <div class="px-3 py-2 bg-light d-flex justify-content-between align-items-center">
+                        <div class="px-3 py-2 d-flex justify-content-between align-items-center module-type-header" role="button" tabindex="0">
                             <strong>{{ $type->name }}</strong>
-                            <label class="m-0 small">
+                            <label class="m-0 small type-full-right-label">
                                 <input type="checkbox" class="type-full-right me-1">
                                 Full rights
                             </label>
                         </div>
 
-                        @forelse($type->modules as $module)
-                            <div class="px-3 py-2 border-top">
-                                <label class="m-0 d-flex justify-content-between align-items-center">
-                                    <span class="fw-semibold">{{ $module->name }}</span>
-                                    <span>
-                                        <input
-                                            type="checkbox"
-                                            class="right-checkbox me-1"
-                                            name="permissions[{{ $module->id }}][enabled]"
-                                            value="1"
-                                            data-module-type="{{ $type->id }}"
-                                            @checked(isset($checkedPermissions[$module->id]))
-                                        >
-                                        <input type="hidden" name="permissions[{{ $module->id }}][module_id]" value="{{ $module->id }}">
-                                    </span>
-                                </label>
+                        <div class="module-detail is-open">
+                            @forelse($type->modules as $module)
+                                <div class="px-3 py-2 border-top">
+                                    <label class="m-0 d-flex justify-content-between align-items-center">
+                                        <span class="fw-semibold">{{ $module->name }}</span>
+                                        <span>
+                                            <input
+                                                type="checkbox"
+                                                class="right-checkbox me-1"
+                                                name="permissions[{{ $module->id }}][enabled]"
+                                                value="1"
+                                                data-module-type="{{ $type->id }}"
+                                                @checked(isset($checkedPermissions[$module->id]))
+                                            >
+                                            <input type="hidden" name="permissions[{{ $module->id }}][module_id]" value="{{ $module->id }}">
+                                        </span>
+                                    </label>
 
-                                @if($module->details->isNotEmpty())
-                                    <!-- <div class="mt-2 small text-muted">
-                                        @foreach($module->details as $detail)
-                                            <div>{{ $detail->controllers }} / {{ $detail->views }}</div>
-                                        @endforeach
-                                    </div> -->
-                                @endif
-                            </div>
-                        @empty
-                            <div class="px-3 py-3 text-muted border-top">
-                                No module rows found.
-                            </div>
-                        @endforelse
+                                    @if($module->details->isNotEmpty())
+                                        <!-- <div class="mt-2 small text-muted">
+                                            @foreach($module->details as $detail)
+                                                <div>{{ $detail->controllers }} / {{ $detail->views }}</div>
+                                            @endforeach
+                                        </div> -->
+                                    @endif
+                                </div>
+                            @empty
+                                <div class="px-3 py-3 text-muted border-top">
+                                    No module rows found.
+                                </div>
+                            @endforelse
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -218,15 +239,53 @@
             });
         });
 
+        document.querySelectorAll('.type-full-right-label').forEach(function (label) {
+            label.addEventListener('click', function (event) {
+                event.stopPropagation();
+            });
+        });
+
+        function setModuleDetailOpen(detail, isOpen) {
+            detail.classList.toggle('is-open', isOpen);
+            detail.style.maxHeight = isOpen ? detail.scrollHeight + 'px' : '0px';
+        }
+
+        document.querySelectorAll('.module-detail').forEach(function (detail) {
+            setModuleDetailOpen(detail, true);
+        });
+
+        document.querySelectorAll('.module-type-header').forEach(function (header) {
+            function toggleModuleDetail() {
+                const detail = header.closest('.module-type-section').querySelector('.module-detail');
+                setModuleDetailOpen(detail, !detail.classList.contains('is-open'));
+            }
+
+            header.addEventListener('click', toggleModuleDetail);
+            header.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    toggleModuleDetail();
+                }
+            });
+        });
+
         document.getElementById('checkAll').addEventListener('click', function () {
             document.querySelectorAll('.right-checkbox, .type-full-right').forEach(function (checkbox) {
                 checkbox.checked = true;
+            });
+
+            document.querySelectorAll('.module-detail').forEach(function (detail) {
+                setModuleDetailOpen(detail, true);
             });
         });
 
         document.getElementById('uncheckAll').addEventListener('click', function () {
             document.querySelectorAll('.right-checkbox, .type-full-right').forEach(function (checkbox) {
                 checkbox.checked = false;
+            });
+
+            document.querySelectorAll('.module-detail').forEach(function (detail) {
+                setModuleDetailOpen(detail, false);
             });
         });
 

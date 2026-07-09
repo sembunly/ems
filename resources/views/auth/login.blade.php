@@ -26,7 +26,7 @@
               <div class="px-4 py-5 text-left auth-form-light px-sm-5">
                 
                 <div class="text-center">
-                  <h1>GenZ Electronics</h1><br>
+                  <h1>Store Electronics</h1><br>
                 </div>
 
                 <h4>Hello! let's get started</h4>
