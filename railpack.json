@@ -3,5 +3,12 @@
   "packages": {
     "php": "8.4"
   },
-  "phpExtensions": ["gd", "gmp"]
+  "steps": {
+    "extensions": {
+      "commands": [
+        "...",
+        "install-php-extensions gd gmp"
+      ]
+    }
+  }
 }
