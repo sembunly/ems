@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Reset Password - GenZ Electronics</title>
+    <title>Reset Password - Store Electronics</title>
 
     <link rel="stylesheet" href="{{ asset('staradmin/vendors/feather/feather.css') }}">
     <link rel="stylesheet" href="{{ asset('staradmin/vendors/mdi/css/materialdesignicons.min.css') }}">
@@ -26,7 +26,7 @@
               <div class="px-4 py-5 text-left auth-form-light px-sm-5">
                 
                 <div class="text-center">
-                  <h1>GenZ Electronics</h1><br>
+                  <h1>Store Electronics</h1><br>
                 </div>
 
                 <h4>Reset your password</h4>

@@ -46,7 +46,7 @@
                                     <th>Storage</th>
                                     <th>Processor</th>
                                     <th>Screen Size</th>
-                                    <th>Description</th>
+                                    <th class="d-none">Description</th>
                                     <th>Created At</th>
                                     @if($canUseProductActions)
                                         <th>Actions</th>
@@ -78,7 +78,7 @@
                                         <td>{{ $product->storage }}</td>
                                         <td>{{ $product->processor }}</td>
                                         <td>{{ $product->screen_size }}</td>
-                                        <td>{{ $product->description }}</td>
+                                        <td class="d-none">{{ $product->description }}</td>
                                         <td>{{ $product->created_at ? $product->created_at->format('d-m-Y') : '-' }}</td>
                                         @if($canUseProductActions)
                                         <td>
@@ -107,7 +107,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="14" class="text-center">No products found.</td>
+                                        <td colspan="{{ $canUseProductActions ? 14 : 13 }}" class="text-center">No products found.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

@@ -1,8 +1,8 @@
 @extends('layouts.frontend')
 
-@section('title', 'About Us - GenZ Electronics')
+@section('title', 'About Us - Store Electronics')
 
-@section('hero_title', 'About GenZ Electronics')
+@section('hero_title', 'About Store Electronics')
 @section('hero_subtitle', 'Your trusted source for laptops and electronics in Cambodia')
 
 @section('hero_action')
@@ -29,9 +29,9 @@
   <div class="col-12">
     <div class="border-0 shadow-sm card" style="border-radius: 16px;">
       <div class="p-4 card-body">
-        <h2 class="mb-4 fw-bold" style="color: #4f46e5;">Welcome to GenZ Electronics</h2>
+        <h2 class="mb-4 fw-bold" style="color: #4f46e5;">Welcome to Store Electronics</h2>
         <p class="mb-4 text-secondary">
-          GenZ Electronics is your trusted destination for the latest laptops and electronics in Cambodia. 
+          Store Electronics is your trusted destination for the latest laptops and electronics in Cambodia. 
           We specialize in providing high-quality laptops from top brands including Apple, Windows, and gaming laptops.
         </p>
         <p class="mb-4 text-secondary">

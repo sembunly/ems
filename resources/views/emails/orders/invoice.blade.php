@@ -132,7 +132,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>GenZ Laptop Store</h1>
+            <h1>Store Laptop Store</h1>
             <p>Thank you for your order!</p>
         </div>
 

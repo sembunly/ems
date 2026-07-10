@@ -76,7 +76,7 @@
                             class="form-control">
                     </div>
 
-                    <div class="mb-3 col-12">
+                    <div class="mb-3 col-12 display-none">
                         <label>Description</label>
                         <textarea name="description" class="form-control"
                             rows="4">{{ old('description', $product->description) }}</textarea>

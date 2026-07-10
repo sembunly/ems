@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>@yield('title','GenZ Electronics')</title>
+  <title>@yield('title','Store Electronics')</title>
 
   {{-- Bootstrap 5 --}}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -25,7 +25,7 @@
   <nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm" style="border-bottom: 1px solid #e5e7eb;">
     <div class="container-fluid px-4">
       <a class="navbar-brand fw-bold fs-4" href="{{ url('/') }}" style="color: #4f46e5;">
-        <i class="bi bi-laptop me-1"></i>GenZ
+        <i class="bi bi-laptop me-1"></i>Store
       </a>
 
       <button class="border-0 shadow-none navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav">
@@ -104,7 +104,7 @@
       <div class="card-body py-4 px-4">
         <div class="row align-items-center g-3">
           <div class="col-md-7">
-            <h1 class="mb-2 fw-bold text-white">@yield('hero_title','Welcome to GenZ Electronics')</h1>
+            <h1 class="mb-2 fw-bold text-white">@yield('hero_title','Welcome to Store Electronics')</h1>
             <p class="mb-0 text-white-50">@yield('hero_subtitle','Discover the latest laptops and accessories at great prices')</p>
           </div>
           <div class="col-md-5 text-md-end">
@@ -138,7 +138,7 @@
       <div class="row g-4">
         <div class="col-md-4">
           <div class="mb-2 fw-bold fs-5" style="color: #4f46e5;">
-            <i class="bi bi-laptop me-2"></i>GenZ Electronics
+            <i class="bi bi-laptop me-2"></i>Store Electronics
           </div>
           <div class="small" style="color: #9ca3af;">
             Your trusted source for laptops and electronics in Cambodia.
@@ -163,8 +163,8 @@
       </div>
       <hr class="my-4" style="border-color: #374151;">
       <div class="d-flex justify-content-between small" style="color: #6b7280;">
-        <span>© {{ date('Y') }} GenZ Electronics</span>
-        <span>GenZ Laptop</span>
+        <span>© {{ date('Y') }} Store Electronics</span>
+        <span>Store Laptop</span>
       </div>
     </div>
   </footer>
